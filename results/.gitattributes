@@ -1,0 +1,12 @@
+link_to_cable_and_score_mapping_sol_validated_v4 filter=lfs diff=lfs merge=lfs -text
+geolocation/all_validated_ip_location_v4 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/caida_asn_v4 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/cymru_asn_v4 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/radb_asn_v4 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/rpki_asn_v4 filter=lfs diff=lfs merge=lfs -text
+link_to_cable_and_score_mapping_sol_validated_v6 filter=lfs diff=lfs merge=lfs -text
+geolocation/all_validated_ip_location_v6 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/cymru_asn_v6 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/radb_asn_v6 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/rpki_asn_v6 filter=lfs diff=lfs merge=lfs -text
+ip_to_asn/cymru_whois_output_v6_default filter=lfs diff=lfs merge=lfs -text
