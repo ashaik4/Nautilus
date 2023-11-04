@@ -14,9 +14,12 @@ Nautilus relies on 2 sources for its traceroutes: (i) RIPE Atlas — 5051 and 51
 
 To generate the traceroutes within a given time frame, the following code segment should be used. Here is an example for code for 5151 measurement id between 15th and 29th March 2022. The relevant functions are present in “traceroute/ripe_traceroute_utils.py” file
 
+```
 start_time = datatime(2022, 3, 15, 0)
 end_time = datetime(2022, 3, 29, 0)
 ripe_process_traceroutes(start_time, end_time, '5151', 4, False)
+```
+
 
 In the above function, 4 indicates the ip version and for traceroute collection initially the last parameter should be set to False. The result of this operation will be saved as a file “stats/ripe_data/uniq_ip_dict_5151_…..”
 
@@ -26,7 +29,7 @@ Note: Multiple files will be generated from the prior operation, but what we req
 
 To generate traceroutes from CAIDA, instead of the timeframe, the corresponding cycle id for the specific duration would be required. For instance for the timeframe between March 13-23 in 2022, the corresponding cycle id is 1647. Hence to generate the traceroutes for this example, the following code segment is used. The relevant functions are present in “traceroute/caida_traceroute_utils.py” file
 
-caida_process_traceroutes(2022, 3, 1647, 4, 1000, False) 
+`caida_process_traceroutes(2022, 3, 1647, 4, 1000, False) `
 
 1647 corresponds to the cycle id, 2022 and 3 are the corresponding year and month for the cycle, 4 refers to the IP version and the last two parameters can be left at the default values for the initial traceroute generation phase.
 
@@ -38,7 +41,7 @@ Note: For running /24 probing with CAIDA (IPv4), access will be required and the
 
 Finally once the traceroutes are generated from RIPE and CAIDA, we need to get all the relevant IP endpoints and links. The code snippet for this is shown below and the function is based in “utils/traceroute_utils.py” file.
 
-load_all_links_and_ips_data(ip_version=4)
+`load_all_links_and_ips_data(ip_version=4)`
 
 This generates “all_ips_v4” and “links_v4” in the “stats/mapping_outputs” directory which correspond to the list of unique IPs and links respectively
 
@@ -48,8 +51,11 @@ This generates “all_ips_v4” and “links_v4” in the “stats/mapping_outpu
 
 First to run the geolocation script, the essential RIPE geolocation files need to be downloaded from the RIPE ftp server and places in “stats/location_data” directory. The code snippet for this is shown below and the details of this function can be found at “location/ripe_geolocation_utils.py” file
 
+```
 links, ips = load_all_links_and_ips_data (ip_version=4)
 generate_location_for_list_of_ips_ripe(ips, ip_version=4)
+```
+
 
 This code snippet generates the RIPE geolocation results as “ripe_location_output_v4_default” in the “stats/location_data” directory.
 
@@ -57,8 +63,11 @@ This code snippet generates the RIPE geolocation results as “ripe_location_out
 
 Similarly for CAIDA, the midar.iff and midar.iff.nodes.geo files should be downloaded from the CAIDA Ark platform and placed in “stats/location_data” directory. The code snippet to get the CAIDA geolocation for a list of IPs is shown below and the function details can be found in “location/caida_geolocation_utils.py” file
 
+```
 links, ips = load_all_links_and_ips_data (ip_version=4)
 generate_location_for_list_of_ips(ips)
+```
+
 
 This code snippet generates the CAIDA geolocation results as “caida_location_output_default” in the “stats/location_data” directory.
 
@@ -66,8 +75,11 @@ This code snippet generates the CAIDA geolocation results as “caida_location_o
 
 For maxmind geolocation to run, the Geolite-city.mmdb file needs to be downloaded from Maxmind website and placed in the “stats/location_data” directory. The following code snippet is to get the Maxmind geolocation post this mmdm file download and the the function details can be found in “location/maxmind_geolocation_utils.py” file
 
+```
 links, ips = load_all_links_and_ips_data (ip_version=4)
 generate_locations_for_list_of_ips(ips, ip_version=4)
+```
+
 
 This code snippet generates the RIPE geolocation results as “maxmind_location_output_v4_default” in the “stats/location_data” directory.
 
@@ -75,12 +87,15 @@ This code snippet generates the RIPE geolocation results as “maxmind_location_
 
 For the rest of geolocation, we rely on an aggregator website. The following code snippet can be used to get the relevant ip locations and the corresponding functions are in “location/ipgeolocation_utils.py”
 
+```
 args = {}
 ip_version = 4
 args['chromedriver_location'] = input('Enter chromedriver full path: ')
 links, ips = load_all_links_and_ips_data (ip_version=4)
 generate_location_for_list_of_ips (list_of_ips, in_chunks=False, args=args)
 common_merge_operation('stats/location_data/iplocation_files', 2, [], ['ipgeolocation_file_'], True, f’iplocation_location_output_v{ip_version}_default') % This operation is from the 'utils/merge_utils.py' file
+```
+
 
 The initial generated files are placed in the “stats/location_data/iplocation_files” directory
 
@@ -88,6 +103,7 @@ The initial generated files are placed in the “stats/location_data/iplocation_
 
 Once all geolocation computations are completed, these geolocations need to be SoL validated. For IPv4, the following code snippet needs to be executed
 
+```
 % First generating the probe to coordinate mappings which are essential for SoL validation
 % For RIPE, the following code snippet can be used (found in ‘traceroute/ripe_probe_location_info.py’ file)
 load_probe_location_result() 
@@ -100,6 +116,8 @@ ripe_process_traceroutes(start_time, end_time, '5151', 4, True)
 ripe_process_traceroutes(start_time, end_time, '5051', 4, True)
 caida_process_traceroutes(2022, 3, 1647, 4, 1000, True)
 common_merge_operation('stats/location_data', 0, [], ['validated_ip_locations'], True, 'all_validated_ip_location_v4') % This operation is from the 'utils/merge_utils.py' file
+```
+
 
 The SoL validated geolocation information will be saved at “stats/location_data/ all_validated_ip_location_v4”
 
@@ -109,6 +127,7 @@ Note: The only major difference with the initial traceroute generation step is t
 
 To generate the IP to AS mapping, the files in ip_to_as directory can be used. A code snippet for generating the IP to AS maps for IPv4 is shown below
 
+```
 links, ips = load_all_links_and_ips_data (ip_version=4)
 
 % For RPKI queries use the following (function details in 'ip_to_as/whois_rpki_utils.py')
@@ -123,6 +142,8 @@ generate_ip2as_for_list_of_ips(ip_version=4, ips, args=args, in_chunks=False)
 
 % For Cymru whois queries, use (function details in 'ip_to_as/cymru_whois_utils.py')
 generate_ip2as_for_list_of_ips(ips, 4)
+```
+
 
 All the generated IP to AS maps will be saved under ‘stats/ip2as_data’ folder
 
@@ -132,6 +153,7 @@ Note: Additionally for IPv4, the relevant CAIDA IP to AS mapping needs to be dow
 
 Once all the pre-requisite information has been generated, the actual Nautilus mapping can take place. The code snippets for the mapping is shown below and associated files with this stage can be found in the utils directory (predominantly 'utils/common_utils.py', 'utils/geolocation_utils.py', 'utils/as_utils.py' and 'utils/merge_utils.py')
 
+```
 mode = 1
 ip_version = 4
 
@@ -144,6 +166,8 @@ common_merge_operation('stats/mapping_outputs', 1, [], ['v4'], True, None)
 % Merging the results for all categories and re-updating the categories map
 generate_final_mapping(mode=mode, ip_version=ip_version, threshold=0.05)
 regenerate_categories_map (mode=mode, ip_version=ip_version)
+```
+
 
 If the prior pre-processing steps are not completed properly, the relevant error message identifying the missing pieces will be displayed while running the above code snippet. In addition to the pre-processing steps, the following operations or downloads will be needed to be carried out (one-time operation)
 
