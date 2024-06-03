@@ -1,8 +1,6 @@
 # Nautilus
 
-This repository contains the code and the results of "Nautilus: A Framework for Cross-Layer Cartography of Submarine Cables and IP Links" paper which is set to appear in the Proceedings of ACM SIGMETRICS 2024. (The ArXiv version of this paper can be viewed at [Nautilus](https://arxiv.org/abs/2302.14201))
-
-When using the Nautilus framework, please cite as : "Alagappan Ramanathan and Sangeetha Abdu Jyothi . 2023. Nautilus: A Framework for Cross-Layer Cartography of Submarine Cables and IP Links. Proc. ACM Meas. Anal. Comput. Syst. 7, 3, Article 46 (December 2023), 34 pages. https://doi.org/10.1145/3626777"
+This repository contains the code and the results of the paper, "Nautilus: A Framework for Cross-Layer Cartography of Submarine Cables and IP Links". Please cite as : "Alagappan Ramanathan and Sangeetha Abdu Jyothi . 2023. Nautilus: A Framework for Cross-Layer Cartography of Submarine Cables and IP Links. Proc. ACM Meas. Anal. Comput. Syst. 7, 3, Article 46 (December 2023), 34 pages. https://doi.org/10.1145/3626777"
 
 This repository is split into code and results which contain the codebase and the major results of Nautilus respectively. A detailed documentation of (i) the usage of various pieces of the codebase is detailed in the [README](https://gitlab.com/netsail-uci/nautilus/-/blob/main/code/README.md) file within the code directory and (ii) the results structure is detailed in the [README](https://gitlab.com/netsail-uci/nautilus/-/blob/main/results/README.md) file within the results directory.
 
