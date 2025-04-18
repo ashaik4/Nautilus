@@ -1,23 +1,28 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import json, time, pickle, requests
 from geopy.geocoders import Nominatim
 from pathlib import Path
+
+from opencage.geocoder import OpenCageGeocode
+OPENCAGE_API_KEY = "0a826b229ded4c42960e297fac4e984d"
+geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
 
 import warnings
 warnings.filterwarnings("ignore")
 
 def get_probe_info_from_webpage():
 
-	chromedriver = input('Enter chromedriver full path: ')
+	chromedriver = "/Users/arshadshaik/Downloads/chromedriver-mac-arm64/chromedriver" # input('Enter chromedriver full path: ')
 	chrome_options = Options()
 	chrome_options.add_argument('--headless')
 
 	url = 'https://www.caida.org/projects/ark/locations/'
-
-	driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+	service = Service(chromedriver)
+	driver = webdriver.Chrome(service=service, options=chrome_options)
 
 	driver.get(url)
 
@@ -40,12 +45,14 @@ def get_probe_info_from_webpage():
 
 def convert_location_to_coordinates (probe_to_location_map):
 
-	geolocator = Nominatim(user_agent='caidaprobe')
+	# geolocator = Nominatim(user_agent='caidaprobe')
 	probe_to_coordinates_map = {}
 
 	for key, location in probe_to_location_map.items():
-		coordinate = geolocator.geocode(location)
-		probe_to_coordinates_map[key] = tuple((coordinate.latitude, coordinate.longitude))
+		print("===============")
+		print(f"key={key}, location={location}")
+		coordinates = geocoder.geocode(location)
+		probe_to_coordinates_map[key] = tuple((coordinates[0]['geometry']['lat'], coordinates[0]['geometry']['lng']))
 
 	# Looks like hlz-nz is missing in the webpage, let's add manually
 	probe_to_coordinates_map['hlz-nz'] = (-37.8662, 175.3361)
@@ -69,9 +76,9 @@ def convert_location_to_coordinates (probe_to_location_map):
 			soup = BeautifulSoup(r.text, 'html.parser')
 			location = soup.find_all(id = 'monitorlocation')[0].text.split('(')[0].strip()
 		
-		coordinate = geolocator.geocode(location)
-		print (f'For {probe}, we got {coordinate}')
-		probe_to_coordinates_map[probe] = tuple((coordinate.latitude, coordinate.longitude))
+		coordinates = geocoder.geocode(location)
+		print (f'For {probe}, we got {coordinates}')
+		probe_to_coordinates_map[probe] = tuple((coordinates[0]['geometry']['lat'], coordinates[0]['geometry']['lng']))
 
 
 	return probe_to_coordinates_map

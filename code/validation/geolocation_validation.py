@@ -47,8 +47,14 @@ def get_distances_for_given_source (source_ip_to_coordinates, ip_to_location):
 def process_results_from_all_sources(ip_to_location):
 
 	maxmind_location, skipped_ips = maxmind_func(ip_to_location.keys())
+	# for key, value in maxmind_location.items(): 
+	# 	print(f"key={key} | value={value.latitude}")
+	maxmind_ip_to_coordinates = {}
+	for k, v in maxmind_location.items():
+		if v.latitude and v.longitude:
+			maxmind_ip_to_coordinates[k] = (float(v.latitude), float(v.longitude))
 
-	maxmind_ip_to_coordinates = {k: (float(v.latitude), float(v.longitude)) for k,v in maxmind_location.items()}
+	# maxmind_ip_to_coordinates = {k: (float(v.latitude), float(v.longitude)) for k,v in maxmind_location.items()}
 
 	maxmind_distances = get_distances_for_given_source(maxmind_ip_to_coordinates, ip_to_location)
 

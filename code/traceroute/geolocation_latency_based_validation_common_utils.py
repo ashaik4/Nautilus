@@ -33,7 +33,7 @@ def load_all_geolocation_info(ip_version=4, tags='default'):
 	else:
 		caida_output = {}
 
-	print ('Finally, we will load the geolocation results from other sources')
+	print ('Finally, we will load the geolocation results from other sources') 
 
 	with open('stats/location_data/iplocation_location_output_v{}_{}'.format(ip_version, tags), 'rb') as fp:
 		iplocation_output = pickle.load(fp)
