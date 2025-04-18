@@ -45,4 +45,4 @@ def generate_split_for_parallel_processing (ip_version=4, exclude_files=[], sing
 
 if __name__ == '__main__':
 
-	generate_split_for_parallel_processing(ip_version=6, exclude_files=['individual_source_combined_results/iplocation_geolocation_v6'])
+	generate_split_for_parallel_processing(ip_version=4, exclude_files=['individual_source_combined_results/iplocation_geolocation_v6'])

@@ -67,7 +67,7 @@ def download_data_from_ripe_atlas (start_time, end_time, msm_id, return_content 
 
 		url = "https://{0}{1}/results?start={2}&stop={3}".format(fixed_url, msm_id, start_time_int, end_time_int)
 		
-		response = requests.get(url)
+		response = requests.get(url, verify=False)
 
 		response_list = response.json()
 
@@ -398,12 +398,12 @@ def ripe_process_traceroutes (start_time, end_time, msm_id, ip_version, geolocat
 if __name__ == '__main__':
 
 	start_time = datetime(2022, 3, 15, 0)
-	end_time = datetime(2022, 3, 29, 0)
+	end_time = datetime(2022, 3, 26, 0) # originally 3, 29. shorten this window to reduce download size
 
 	# The measurement ids used are 5051 and 5151 for v4 and 6052 and 6152 for v6
 	# The number (6) in example below indicates the IP version, which will be according to the measurement IDs
 	# That number is mostly used for just saving the results
 
-	result = ripe_process_traceroutes(start_time, end_time, '6052', 6, True)
+	result = ripe_process_traceroutes(start_time, end_time, '5051', 4, False)
 
 	print (f'Result length is {len(result)}')

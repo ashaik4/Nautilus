@@ -36,10 +36,10 @@ def download_warts_file (year, month, cycle_id, download_count=1000, ip_version=
 	month = '{0:02d}'.format(int(month))
 
 	if ip_version == 4:
-		url = f'https://data.caida.org/datasets/topology/ark/ipv4/prefix-probing/{year}/{month}/'
+		url = f'https://publicdata.caida.org/datasets/topology/ark/ipv4/prefix-probing/{year}/{month}/'
 
-		user = input('Enter CAIDA username: ')
-		pwd = input('Enter the password: ')
+		# user = input('Enter CAIDA username: ')
+		# pwd = input('Enter the password: ')
 
 		save_path = Path.cwd() / 'stats' / 'caida_data'
 		save_file = Path(save_path / 'index.html')
@@ -47,7 +47,7 @@ def download_warts_file (year, month, cycle_id, download_count=1000, ip_version=
 		if not os.path.exists(save_path):
 			os.makedirs(save_path, exist_ok = True)
 
-		string = f'wget --user {user} --password {pwd} -O {save_file} {url}'
+		string = f'wget -O {save_file} {url}'
 	else:
 		url = f'https://publicdata.caida.org/datasets/topology/ark/ipv6/probe-data/{year}/{month}/'
 
@@ -87,7 +87,7 @@ def download_warts_file (year, month, cycle_id, download_count=1000, ip_version=
 			updated_url = url + link
 			save_file = Path(save_path / link)
 			if ip_version == 4:
-				string = f'wget --user {user} --password {pwd} -O {save_file} {updated_url}'
+				string = f'wget -O {save_file} {updated_url}'
 			else:
 				string = f'wget -O {save_file} {updated_url}'
 
@@ -434,6 +434,6 @@ def caida_process_traceroutes (year, month, cycle_id, ip_version=4, download_cou
 
 if __name__ == '__main__':
 
-	result = caida_process_traceroutes(2022, 3, 1647, 6, 1000, True)
+	result = caida_process_traceroutes(2022, 3, 1647, 4, 1000, True)
 
 	print (f'Final dictionary length : {len(result)}')

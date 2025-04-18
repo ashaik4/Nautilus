@@ -1,22 +1,45 @@
-import subprocess, pickle
+import subprocess
+import pickle
 from pathlib import Path
+import certifi
+import os
+import urllib3
+import requests
+from pprint import pprint
+
+# 👇 Disable warnings about insecure SSL (since we are bypassing verification)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+RIPE_ATLAS_URL = "https://atlas.ripe.net/api/v2/probes/"
+OUTPUT_FILE = Path("stats/all_ripe_probes_ip_and_coordinates")
 
 def run_ripe_atlas_query_to_get_all_probe_locations():
-
-	p = subprocess.Popen('ripe-atlas probe-search --all --status 1 --field id --field address_v4 --field coordinates', 
-                     shell=True, stdout=subprocess.PIPE)
-	result = p.communicate()[0].decode()
-
-	entry_list = result.split('\n')[3:-5]
-	probe_entries = [tuple(item.split()) for item in entry_list]
-
 	probe_to_coordinate_map = {}
+	page_url = RIPE_ATLAS_URL + "?status=1&fields=id,address_v4,geometry&page_size=500"
 
-	for item in probe_entries:
-		lat_lon_tuple = tuple(map(float, item[2].split(',')))
-		# -1111.0 is used to tag all probes for which location is unknown (these are typically not public probes)
-		if -1111.0 not in lat_lon_tuple:
-			probe_to_coordinate_map[item[0]] = (item[1], lat_lon_tuple)
+	while page_url:
+		print(f"Fetching: {page_url}")
+		try:
+			response = requests.get(page_url, verify=False)  # 🚨 SSL cert check bypassed here
+			data = response.json()
+		except requests.exceptions.RequestException as e:
+			print(f"❌ Request failed: {e}")
+			break
+
+		for probe in data.get("results", []):
+			probe_id = str(probe.get("id"))
+			address_v4 = probe.get("address_v4", "")
+			geometry = probe.get("geometry", {})
+
+			try:
+				lat, lon = geometry.get("coordinates", -1111.0)[0], geometry.get("coordinates", -1111.0)[1]
+			except: 
+				print("error")
+
+			if -1111.0 not in (lat, lon):
+				probe_to_coordinate_map[probe_id] = (address_v4, (lat, lon))
+
+		page_url = data.get("next")
 
 	return probe_to_coordinate_map
 

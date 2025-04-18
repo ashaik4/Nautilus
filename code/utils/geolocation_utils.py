@@ -1200,7 +1200,7 @@ def get_top_country_continent_pairs (ip_version=4):
 
 if __name__ == '__main__':
 
-	links, all_ips = load_all_links_and_ips_data(ip_version=6)
+	links, all_ips = load_all_links_and_ips_data(ip_version=4)
 
 	geolocation_latlon_cluster_and_score_map, geolocation_latlon_cluster_and_score_map_sol_validated = generate_latlon_cluster_and_score_map (all_ips, ip_version=6, mode=2, threshold=0.05)
 
