@@ -8,7 +8,7 @@ from geopy.geocoders import Nominatim
 from pathlib import Path
 
 from opencage.geocoder import OpenCageGeocode
-OPENCAGE_API_KEY = "0a826b229ded4c42960e297fac4e984d"
+OPENCAGE_API_KEY = "REPLACE_WITH_YOUR_KEY"
 geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
 
 import warnings
